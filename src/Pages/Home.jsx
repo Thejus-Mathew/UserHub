@@ -111,7 +111,7 @@ function Home() {
                                     {item?.email}
                                 </td>
                                 <td>
-                                    df
+                                    {item?.preLogged}
                                 </td>
                                 <td>
                                     <button className='btn btn-light text-danger m-1' onClick={()=>handleRemove(item?.email)}><i className="fa-solid fa-square-minus"></i></button>

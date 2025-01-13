@@ -79,11 +79,9 @@ function BlockedUser() {
     const handleUnblock = async (mailId) => {
         try{
             let data =await blockedListDB.getByIndex('email',mailId)
-            console.log(data)
             let array = [...data.list]
             array = array.filter(item=>item !=email)
             data.list = array
-            console.log(data);
             await blockedListDB.update(data)
 
             let array1 = [...user.blockedUsers]
@@ -123,7 +121,7 @@ function BlockedUser() {
                                     {item?.email}
                                 </td>
                                 <td>
-                                    df
+                                    {item?.preLogged}
                                 </td>
                                 <td>
                                     {

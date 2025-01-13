@@ -31,6 +31,10 @@ function Auth() {
         try{
             const user = await usersDB.getByIndex('email',email)
             if(user?.password===password){
+                const time = new Date().toLocaleTimeString()
+                const date = new Date().toLocaleDateString()
+                let data = {...user,preLogged:`${date} ${time}`}
+                await usersDB.update(data)
                 sessionStorage.setItem("email",email)
                 navigate('/home')
             }else{
@@ -48,7 +52,9 @@ function Auth() {
             if(user){
                 toast.warn('Email is already registered')
             }else{
-                await usersDB.add({name,email,password,addedUsers:[],blockedUsers:[]})
+                const time = new Date().toLocaleTimeString()
+                const date = new Date().toLocaleDateString()
+                await usersDB.add({name,email,password,preLogged:`${date} ${time}`,addedUsers:[],blockedUsers:[]})
                 await blockedListDB.add({email,list:[]})
                 toast.success(`${name} registered successfully`)
                 handleSwitch()

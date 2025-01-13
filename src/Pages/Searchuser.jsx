@@ -6,7 +6,7 @@ import { MDBTable, MDBTableBody, MDBTableHead } from 'mdb-react-ui-kit';
 import Footer from '../Components/Footer';
 import { toast } from 'react-toastify';
 
-function AllUser() {
+function Searchuser() {
     const[userList,setUserList]=useState([])
     const[blockedList,setBlockedList]=useState({email:"",list:[]})
     const[user,setuser]=useState({})
@@ -16,6 +16,8 @@ function AllUser() {
 
     const email = sessionStorage.getItem('email')
     const navigate = useNavigate()
+
+    const search = sessionStorage.getItem('search')
 
 
     const getUserData = async () => {
@@ -95,11 +97,27 @@ function AllUser() {
             toast.error(`failed to Block ${err}`)
         }
     }
-    
+
+    const mark = (description) =>{
+        let index = description.toLowerCase().search(search.toLowerCase())
+        let str1 = ""
+        let str2 = ""
+        let str3 = ""
+        for (let i in description){
+          if (i < index){
+            str1 += description[i]
+          }else if(i < (index+search.length)){
+            str2 += description[i]
+          }else{
+            str3 += description[i]
+          }
+        }
+        return <span>{str1}<span className='bg-warning'>{str2}</span>{str3}</span>
+      }
   return (
     <>
       <Header/>
-      <section id='All UserList'>
+      <section id='Search UserList'>
         <div className="table-responsive container my-5" style={{minHeight:"64dvh"}}>
             <MDBTable align='middle'>
                 <MDBTableHead>
@@ -115,10 +133,11 @@ function AllUser() {
                     {
                         userList.length>0?
                         userList.filter((item)=>item?.email != user?.email && !blockedList?.list.includes(item?.email) && !user.blockedUsers.includes(item?.email))
+                        .filter(item=>item.name.toLowerCase().includes(search.toLowerCase()))
                         .map((item,index)=>(
                             <tr key={index} className='border-bottom border-info'>
                                 <td>
-                                    {item?.name}
+                                    {mark(item?.name)}
                                 </td>
                                 <td>
                                     {item?.email}
@@ -149,4 +168,4 @@ function AllUser() {
   )
 }
 
-export default AllUser
+export default Searchuser

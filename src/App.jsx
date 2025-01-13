@@ -4,6 +4,7 @@ import Auth from './Pages/Auth'
 import Home from './Pages/Home'
 import BlockedUser from './Pages/BlockedUser'
 import AllUser from './Pages/AllUser'
+import Searchuser from './Pages/Searchuser'
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       <Route element={<Home/>} path='/home' />
       <Route element={<BlockedUser/>} path='/BlockedUsers' />
       <Route element={<AllUser/>} path='/AllUsers' />
+      <Route element={<Searchuser/>} path='/searchUser' />
     </Routes>
     </>
   )

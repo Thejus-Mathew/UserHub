@@ -12,7 +12,8 @@ function Header({auth}) {
         if(!search){
             toast.info("please enter search content")
         }else{
-            toast.success("handle search")
+            sessionStorage.setItem("search",search)
+            navigate('/searchUser')
         }
     }
 

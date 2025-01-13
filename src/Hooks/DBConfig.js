@@ -1,6 +1,6 @@
 export const DBConfig = {
     name: "MyDB",
-    version: 1,
+    version: 4,
     objectStoresMeta: [
       {
         store: "users",
@@ -10,6 +10,7 @@ export const DBConfig = {
           { name: "email", keypath: "email", options: { unique: true } },
           { name: "password", keypath: "password", options: { unique: false } },
           { name: "addedUsers", keypath: "addedUsers", options: { unique: false, multiEntry: true  } },
+          { name: "blockedUsers", keypath: "blockedUsers", options: { unique: false, multiEntry: true  } },
         ],
       },
       {

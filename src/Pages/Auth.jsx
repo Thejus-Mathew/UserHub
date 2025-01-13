@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import Footer from '../Components/Footer'
 import Header from '../Components/Header'
 import { useIndexedDB } from 'react-indexed-db-hook';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 
 function Auth() {
@@ -10,14 +12,54 @@ function Auth() {
     const[name,setName]=useState('')
     const[login,setLogin]=useState(true)
 
-    const users = useIndexedDB('users');
-    const blockedList = useIndexedDB('blockedList');
+    const usersDB = useIndexedDB('users');
+    const blockedListDB = useIndexedDB('blockedList');
+
+    const navigate = useNavigate()
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        console.log(name,password,email);
-        
+        if(login){
+            handleLogin()
+        }else{
+            handleRegister()
+        }
     }
+
+
+    const handleLogin=async()=>{
+        try{
+            const user = await usersDB.getByIndex('email',email)
+            if(user?.password===password){
+                sessionStorage.setItem("email",email)
+                navigate('/home')
+            }else{
+                toast.warn('Invalid User Credentials')
+            }
+        }catch(err){
+            toast.error(`Failed to login ${err}`)
+        }
+    }
+
+
+    const handleRegister=async ()=>{
+        try{
+            const user = await usersDB.getByIndex('email',email)
+            if(user){
+                toast.warn('Email is already registered')
+            }else{
+                await usersDB.add({name,email,password,addedUsers:[],blockedUsers:[]})
+                await blockedListDB.add({email,list:[]})
+                toast.success(`${name} registered successfully`)
+                handleSwitch()
+            }
+        }catch(err){
+            toast.error(`Failed to register ${err}`)
+            console.log(`Failed to register ${err}`,err)
+        }
+    }
+
+
     const handleSwitch = () => {
         setEmail("")
         setName("")

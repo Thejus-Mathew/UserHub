@@ -1,11 +1,12 @@
 import { MDBInput } from 'mdb-react-ui-kit'
 import React, { useState } from 'react'
 import { Container, Nav, Navbar } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 
 function Header({auth}) {
     const[search,setSearch]=useState("")
+    const navigate = useNavigate()
 
     const handleSearch =()=>{
         if(!search){
@@ -20,11 +21,16 @@ function Header({auth}) {
           handleSearch()
         }
     }
+
+    const handleLogout = () => {
+        sessionStorage.clear()
+        navigate('/')
+    }
   return (
     <header>
         <Navbar expand="lg" className="bg-info text-light">
             <Container fluid>
-                <Link to='/' style={{textDecoration:"none"}}><Navbar.Brand className='fs-3 fw-bold text-light'>UserHub</Navbar.Brand></Link>
+                <Link to='/home' style={{textDecoration:"none"}}><Navbar.Brand className='fs-3 fw-bold text-light'>UserHub</Navbar.Brand></Link>
                 {
                     auth?
                     <></>:
@@ -36,8 +42,9 @@ function Header({auth}) {
                         style={{ maxHeight: '100px' }}
                         navbarScroll
                     >
-                        <Link to='/' style={{textDecoration:"none"}}><Navbar.Brand className='text-light fs-6 m-2'>All Users</Navbar.Brand></Link>
-                        <Link to='pending' style={{textDecoration:"none"}}><Navbar.Brand className='text-light fs-6 m-2'>Blocked Users</Navbar.Brand></Link>
+                        <Link to='/allUsers' style={{textDecoration:"none"}}><Navbar.Brand className='text-light fs-6 m-2'>All Users</Navbar.Brand></Link>
+                        <Link to='/blockedUsers' style={{textDecoration:"none"}}><Navbar.Brand className='text-light fs-6 m-2'>Blocked Users</Navbar.Brand></Link>
+                        <Navbar.Brand className='text-light fs-6 m-2 pointer' onClick={()=>handleLogout()}>Logout</Navbar.Brand>
                     </Nav>
                     <div className='d-flex justify-content-center'>
                         <MDBInput value={search}  type="text" onChange={(e)=>setSearch(e.target.value)} onKeyDown={handleKeyDown} placeholder='Search User'/>
